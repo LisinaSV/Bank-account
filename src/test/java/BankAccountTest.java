@@ -1,48 +1,59 @@
-import com.github.javafaker.Faker;
-import io.restassured.RestAssured;
-import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.filter.log.LogDetail;
-import io.restassured.http.ContentType;
-import io.restassured.specification.RequestSpecification;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import com.codeborne.selenide.Condition;
+import org.junit.jupiter.api.*;
+import java.time.Duration;
 
-import java.util.Locale;
-
+import static com.codeborne.selenide.Selenide.*;
 import static io.restassured.RestAssured.given;
-import static java.awt.SystemColor.text;
-import static org.hamcrest.Matchers.equalTo;
 
-public class BankAccountTest {
+class BankAccountTest {
 
-    private static RequestSpecification requestSpec;
-    private final Faker faker = new Faker(new Locale("ru"));
-
-    @BeforeAll
-    static void setUp() {
-        requestSpec = new RequestSpecBuilder()
-                .setBaseUri("http://localhost")
-                .setPort(9999)
-                .setContentType(ContentType.JSON)
-                .setAccept(ContentType.JSON)
-                .log(LogDetail.ALL)
-                .build();
+    @BeforeEach
+    void setUp() {
+        open("http://localhost:9999");
     }
 
     @Test
-    void shouldCreateUser() {
-        String login = faker.name().username();
-        String password = faker.internet().password();
-        given()
-                .spec(requestSpec)
-                .body("{\"login\": \"" + login + "\", \"password\": \"" + password + "\"}")
-                .when()
-                .post("/api/system/users")
-                .then()
-                .statusCode(200)
-                .header("ContentType" ,"application/json;charset=UTF-8")
-                .contentType(ContentType.JSON)
-                .body("login", equalTo(login))
-                .body("password", equalTo(password));
+    @DisplayName("Should successfully login with registered active user")
+    void shouldSuccessfulLoginIfRegisteredActiveUser() {
+
+        var registeredUser = Registration.UserGenerator.getRegisteredUser("active");
+
+        $("[data-test-id='login'] input").setValue(registeredUser.getLogin());
+        $("[data-test-id='password'] input").setValue(registeredUser.getPassword());
+        $("button.button").click();
+
+
+        $("h2")
+                .shouldHave(Condition.exactText("Личный кабинет"), Duration.ofSeconds(10))
+                .shouldBe(Condition.visible, Duration.ofSeconds(10));
     }
+
+    @Test
+    @DisplayName("Should get error message if login with not registered user")
+    void shouldGetErrorIfNotRegisteredUser() {
+        var notRegisteredUser = Registration.UserGenerator.getUser("active");
+
+        $("[data-test-id='login'] input").setValue(notRegisteredUser.getLogin());
+        $("[data-test-id='password'] input").setValue(notRegisteredUser.getPassword());
+        $("button.button").click();
+        $("[data-test-id='error-notification'] .notification__content")
+                .shouldHave(Condition.text("Ошибка! Неверно указан логин или пароль"), Duration.ofSeconds(10))
+                .shouldBe(Condition.visible, Duration.ofSeconds(10));
+    }
+
+    @Test
+    @DisplayName("Should get error message if login with blocked registered user")
+    void shouldGetErrorIfBlockedUser() {
+        var blockedUser = Registration.UserGenerator.getRegisteredUser("blocked");
+
+        $("[data-test-id='login'] input").setValue(blockedUser.getLogin());
+        $("[data-test-id='password'] input").setValue(blockedUser.getPassword());
+        $("button.button").click();
+
+
+        $("[data-test-id='error-notification'] .notification__content")
+                .shouldHave(Condition.text("Ошибка! Пользователь заблокирован"), Duration.ofSeconds(10))
+                .shouldBe(Condition.visible, Duration.ofSeconds(10));
+    }
+
 }
