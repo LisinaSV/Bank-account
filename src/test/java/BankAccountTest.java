@@ -3,7 +3,7 @@ import org.junit.jupiter.api.*;
 import java.time.Duration;
 
 import static com.codeborne.selenide.Selenide.*;
-import static io.restassured.RestAssured.given;
+
 
 class BankAccountTest {
 

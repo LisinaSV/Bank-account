@@ -4,13 +4,11 @@ import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import lombok.Value;
-import org.junit.jupiter.api.BeforeAll;
-
 import java.util.Locale;
-
 import static io.restassured.RestAssured.given;
 
-public class Registration {
+
+class Registration {
 
     private static final RequestSpecification REQUEST_SPEC = new RequestSpecBuilder()
             .setBaseUri("http://localhost")
@@ -19,8 +17,11 @@ public class Registration {
             .setContentType(ContentType.JSON)
             .log(LogDetail.ALL)
             .build();
+    private static final Faker FAKER = new Faker(new Locale("en"));
 
-//    @BeforeAll
+    private Registration() {
+    }
+
     static void setUpAll() {
         // сам запрос
         given() // "дано"
@@ -31,13 +32,6 @@ public class Registration {
                 .then() // "тогда ожидаем"
                 .statusCode(200); // код 200 OK
     }
-
-    private static final Faker FAKER = new Faker(new Locale("en"));
-
-
-    private Registration() {
-    }
-
 
     public static void sendRequest(RegistrationDto user) {
         given()
