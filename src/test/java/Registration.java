@@ -20,12 +20,12 @@ public class Registration {
             .log(LogDetail.ALL)
             .build();
 
-    @BeforeAll
+//    @BeforeAll
     static void setUpAll() {
         // сам запрос
         given() // "дано"
                 .spec(REQUEST_SPEC) // указываем, какую спецификацию используем
-                .body(new RegistrationDto("vasya", "password", "active")) // передаём в теле объект, который будет преобразован в JSON
+                .body(new RegistrationDto("user", "password", "active")) // передаём в теле объект, который будет преобразован в JSON
                 .when() // "когда"
                 .post("/api/system/users") // на какой путь относительно BaseUri отправляем запрос
                 .then() // "тогда ожидаем"
