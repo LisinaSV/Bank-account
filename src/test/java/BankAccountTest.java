@@ -1,4 +1,5 @@
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -12,8 +13,17 @@ import static com.codeborne.selenide.Selenide.*;
 class BankAccountTest {
     @BeforeEach
     void setup() {
-        Selenide.open("http://localhost:9999");
 
+            Configuration.baseUrl = "http://localhost:9999";
+            Configuration.timeout = 15000;
+            Configuration.headless = true;
+            ChromeOptions chromeOptions = new ChromeOptions();
+            chromeOptions.addArguments("--no-sandbox");
+            chromeOptions.addArguments("--disable-dev-shm-usage");
+            chromeOptions.addArguments("--headless=new");
+            chromeOptions.addArguments("--remote-allow-origins=*");
+            System.setProperty("webdriver.chrome.options", String.valueOf(chromeOptions.toJson()));
+            open("http://localhost:9999");
     }
 
     @Test
