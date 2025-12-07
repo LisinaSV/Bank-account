@@ -1,4 +1,5 @@
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -10,12 +11,8 @@ import static com.codeborne.selenide.Selenide.*;
 
 class BankAccountTest {
     @BeforeEach
-    public void beforeEach() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--headless");
-        open("http://localhost:9999");
+    void setup() {
+        Selenide.open("http://localhost:9999");
 
     }
 
