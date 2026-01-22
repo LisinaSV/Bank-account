@@ -1,1 +1,1 @@
-[![Java CI with Gradle](https://github.com/LisinaSV/Bank-account/actions/workflows/gradle.yml/badge.svg)](https://github.com/LisinaSV/Bank-account/actions/workflows/gradle.yml)
+[![Java CI with Gradle](https://github.com/LisinaSV/Bank-account/actions/workflows/gradle.yml/badge.svg)](https://github.com/LisinaSV/Bank-account/actions/workflows/gradle.yml)![img.png](img.png)![img_1.png](img_1.png)
