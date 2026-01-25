@@ -33,6 +33,7 @@ dependencies {
     testImplementation 'org.slf4j:slf4j-simple:2.0.3'
     testImplementation 'io.qameta.allure:allure-selenide:2.27.0'
 
+
 }
 
 test {

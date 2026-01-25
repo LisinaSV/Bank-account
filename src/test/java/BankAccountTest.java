@@ -1,6 +1,10 @@
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -11,6 +15,11 @@ import static com.codeborne.selenide.Selenide.*;
 
 
 class BankAccountTest {
+    @BeforeAll
+    static void setUpAll() { SelenideLogger.addListener( "allure", new AllureSelenide()); }
+
+    @AfterAll
+    static void tearDownAll() { SelenideLogger.removeListener("allure"); }
     @BeforeEach
     void setup() {
         Selenide.open("http://localhost:9999");
